@@ -1,5 +1,20 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+
+// This variable can be accessed from within TeamCode classes by using BuildConfig.VUFORIA_KEY
+String vuforiaKey
+
+try {
+    def vuforiaPropertiesFileStream = new FileInputStream(file('./vuforia.properties').absolutePath)
+    def vuforiaProperties = new Properties()
+    vuforiaProperties.load(vuforiaPropertiesFileStream)
+    vuforiaKey = vuforiaProperties['VUFORIA_KEY']
+} catch (FileNotFoundException) {
+    println "vuforia.properties not found"
+} finally {
+    if (vuforiaKey == null) {
+        vuforiaKey = '""'
+    }
+}
 
 android {
     compileSdkVersion 27
@@ -29,16 +44,18 @@ android {
             ndk {
                 abiFilters "armeabi-v7a"
             }
-
-            minifyEnabled true
+	    
+	    // Note: DOES NOT WORK with this set to true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             ndk {
                 abiFilters "armeabi-v7a"
             }
-
-            minifyEnabled true
+            
+	    // Note: DOES NOT WORK with this set to true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             useProguard false
         }
@@ -55,9 +72,6 @@ android {
 }
 
 dependencies {
-    //Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
     //FTC libraries
     implementation "com.github.modular-ftc:robotcontroller-repackaged:$ftc_version.1-lite"
     implementation "com.github.modular-ftc:robotcore-repackaged:$ftc_version.1-lite"
@@ -65,7 +79,7 @@ dependencies {
 
     implementation "org.first.ftc:hardware:$ftc_version"
 
-    //The Pattonville Robotics shared libraries are included by default. Remove the following line to stop using them.
-    implementation "com.github.Pattonville-Robotics:Common-Code:3992c9f"
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+    implementation project(':Tealisp')
 }
 
