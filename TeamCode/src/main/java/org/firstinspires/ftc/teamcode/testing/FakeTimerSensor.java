@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.testing;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.core.SensorInterface;
+import org.firstinspires.ftc.teamcode.core.structure.SensorInterface;
 
 public class FakeTimerSensor implements SensorInterface {
     HardwareMap hardwareMap;

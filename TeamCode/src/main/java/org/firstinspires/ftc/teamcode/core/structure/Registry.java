@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.core;
+package org.firstinspires.ftc.teamcode.core.structure;
 
 import android.util.Log;
 

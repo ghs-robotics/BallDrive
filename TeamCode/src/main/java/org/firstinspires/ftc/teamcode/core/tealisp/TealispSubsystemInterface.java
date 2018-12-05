@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.core.tealisp;
 
-import org.firstinspires.ftc.teamcode.core.Registry;
+import org.firstinspires.ftc.teamcode.core.structure.Registry;
 import org.majora320.tealisp.evaluator.JavaInterface;
 import org.majora320.tealisp.evaluator.LispException;
 import org.majora320.tealisp.evaluator.LispObject;

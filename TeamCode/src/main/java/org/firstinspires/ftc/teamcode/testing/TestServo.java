@@ -5,8 +5,8 @@ import android.util.Log;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.core.OpModeExtended;
-import org.firstinspires.ftc.teamcode.core.Setting;
-import org.firstinspires.ftc.teamcode.core.Subsystem;
+import org.firstinspires.ftc.teamcode.core.structure.Setting;
+import org.firstinspires.ftc.teamcode.core.structure.Subsystem;
 
 public class TestServo extends Subsystem {
     @Setting

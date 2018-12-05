@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.testing;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.core.OpModeExtended;
-import org.firstinspires.ftc.teamcode.core.Setting;
-import org.firstinspires.ftc.teamcode.core.Subsystem;
+import org.firstinspires.ftc.teamcode.core.structure.Setting;
+import org.firstinspires.ftc.teamcode.core.structure.Subsystem;
 
 import java.util.Map;
 

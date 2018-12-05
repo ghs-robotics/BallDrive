@@ -29,7 +29,6 @@
 
 package org.firstinspires.ftc.teamcode.core.vuforia;
 
-import android.hardware.Sensor;
 import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -42,11 +41,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.teamcode.core.ClassHolder;
+import org.firstinspires.ftc.teamcode.core.structure.ClassHolder;
 import org.firstinspires.ftc.teamcode.core.OpModeExtended;
-import org.firstinspires.ftc.teamcode.core.SensorInterface;
-import org.firstinspires.ftc.teamcode.core.SensorManager;
-import org.firstinspires.ftc.teamcode.core.Subsystem;
+import org.firstinspires.ftc.teamcode.core.structure.SensorManager;
+import org.firstinspires.ftc.teamcode.core.structure.Subsystem;
 import org.majora320.tealisp.evaluator.JavaInterface;
 
 import java.io.IOException;

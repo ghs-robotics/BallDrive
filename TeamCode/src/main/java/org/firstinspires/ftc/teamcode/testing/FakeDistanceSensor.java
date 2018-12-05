@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.testing;
 
-import org.firstinspires.ftc.teamcode.core.SensorInterface;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Iterator;
-import java.util.LinkedList;
+import org.firstinspires.ftc.teamcode.core.structure.SensorInterface;
+
 import java.util.Random;
 
 public class FakeDistanceSensor implements SensorInterface{

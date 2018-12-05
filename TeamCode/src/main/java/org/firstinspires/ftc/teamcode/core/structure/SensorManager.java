@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.core;
+package org.firstinspires.ftc.teamcode.core.structure;
+
+import org.firstinspires.ftc.teamcode.core.OpModeExtended;
 
 import java.util.ArrayList;
 

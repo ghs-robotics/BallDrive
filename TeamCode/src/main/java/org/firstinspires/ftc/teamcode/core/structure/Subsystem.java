@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode.core;
+package org.firstinspires.ftc.teamcode.core.structure;
 
 import android.util.Log;
+
+import org.firstinspires.ftc.teamcode.core.OpModeExtended;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

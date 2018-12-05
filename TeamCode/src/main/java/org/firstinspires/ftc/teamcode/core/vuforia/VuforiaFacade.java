@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.core.vuforia;
 
-import org.firstinspires.ftc.teamcode.core.Registry;
-import org.firstinspires.ftc.teamcode.core.SensorManager;
+import org.firstinspires.ftc.teamcode.core.structure.Registry;
+import org.firstinspires.ftc.teamcode.core.structure.SensorManager;
 
 import java.util.Vector;
 

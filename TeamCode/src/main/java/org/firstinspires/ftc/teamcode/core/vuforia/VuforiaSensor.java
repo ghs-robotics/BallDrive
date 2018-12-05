@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.core.vuforia;
 
-import org.firstinspires.ftc.teamcode.core.SensorInterface;
+import org.firstinspires.ftc.teamcode.core.structure.SensorInterface;
 
 public class VuforiaSensor implements SensorInterface {
     private VuforiaEncapsulator encapsulator;
