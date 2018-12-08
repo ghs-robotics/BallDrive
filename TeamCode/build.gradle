@@ -52,6 +52,7 @@ android {
 
     lintOptions {
         ignore 'InvalidPackage' // Needed for Apache Math3 as it references java.awt.geom
+        abortOnError false
     }
 }
 
