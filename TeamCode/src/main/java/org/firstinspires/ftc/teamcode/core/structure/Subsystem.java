@@ -23,7 +23,8 @@ public abstract class Subsystem {
 
 
     public void registerSettings() {
-        for (Field field : this.getClass().getDeclaredFields()) {
+        Class clazz = this.getClass();
+        for (Field field : clazz.getDeclaredFields()) {
             String name = field.getName();
             Annotation[] annotations = field.getDeclaredAnnotations();
             for (Annotation annotation : annotations) {
@@ -42,12 +43,12 @@ public abstract class Subsystem {
         }
     }
 
-    public Object getSetting(String name) throws IllegalAccessException {
+    public Object getSetting(String name) {
         try {
             return settings.get(name).get(this);
         } catch (IllegalAccessException e) {
             Log.w("team-code", "IllegalAccessException from Subsystem.getSetting", e);
-            throw e;
+            return null;
         }
     }
 }

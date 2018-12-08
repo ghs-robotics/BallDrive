@@ -53,23 +53,23 @@ public class Registry {
 
     public static SensorManager getSensorManagerByName(String name) {
         if (sensors == null) {
-            Log.w("team-code", "attempt to fetch SensorManager " + name
+            Log.w("team-code-spam", "attempt to fetch SensorManager " + name
                     + " but sensors is null");
         }
         SensorManager result =  sensors.get(name);
         if (result == null)
-            Log.w("team-code", "get by name: could not find SensorManager named " + name);
+            Log.w("team-code-spam", "get by name: could not find SensorManager named " + name);
         return result;
     }
 
     public static Subsystem getSubsystemByName(String name) {
         if (subsystems == null) {
-            Log.w("team-code", "attempt to fetch Subsystem " + name
+            Log.w("team-code-spam", "attempt to fetch Subsystem " + name
                     + " but subsystems is null");
         }
         Subsystem result = subsystems.get(name);
         if (result == null)
-            Log.w("team-code", "get by name: could not find Subsystem named " + name);
+            Log.w("team-code-spam", "get by name: could not find Subsystem named " + name);
         return result;
     }
 

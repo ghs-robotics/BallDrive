@@ -34,7 +34,7 @@ public class TealispSubsystemInterface extends JavaInterface {
                     Object value = Registry.getSubsystemByName(subsystemName)
                             .getSetting(subsystemKey);
                     return LispObject.fromJavaObject(value);
-                } catch (IllegalAccessException | ClassNotFoundException e) {
+                } catch (ClassNotFoundException e) {
                     return new LispObject.Boolean(false);
                 }
         }

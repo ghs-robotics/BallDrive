@@ -8,7 +8,6 @@ import org.majora320.tealisp.evaluator.LispException;
 
 import java.io.File;
 import org.firstinspires.ftc.teamcode.core.iobuiltin.GamepadExtended;
-import org.firstinspires.ftc.teamcode.core.iobuiltin.LogRecorder;
 import org.firstinspires.ftc.teamcode.core.structure.ClassHolder;
 import org.firstinspires.ftc.teamcode.core.structure.Registry;
 import org.firstinspires.ftc.teamcode.core.tealisp.TealispFileManager;
@@ -26,6 +25,7 @@ public abstract class OpModeExtended extends OpMode {
     public abstract ClassHolder getClassHolder();
 
     public final void init() {
+        Log.i("team-code", "--------framework init start--------");
         try {
             this.inputControlManager = getInputControlManager();
             this.classHolder = getClassHolder();
@@ -41,8 +41,13 @@ public abstract class OpModeExtended extends OpMode {
             Registry.initSubsystems();
             inputControlManager.init();
         } catch (Exception e) {
-            Log.e("team-code-init-error", getStackTrace(e));
+            Log.e("team-code-log-error", getStackTrace(e));
         }
+        Log.i("team-code", "--------framework init end----------");
+    }
+
+    public final void start() {
+        Log.i("team-code", "--------main loop start--------");
     }
 
     public final void loop() {
@@ -54,12 +59,13 @@ public abstract class OpModeExtended extends OpMode {
             inputControlManager.update();
             Registry.updateSubsystemActuators();
         } catch (Exception e) {
-            Log.e("team-code-main-error", getStackTrace(e));
+            Log.e("team-code-log-error", getStackTrace(e));
         }
     }
 
     public void stop() {
-        LogRecorder.writeLog();
+        Log.i("team-code", "--------main loop end--------");
+        //LogRecorder.writeLog();
     }
 
     public interface InputControlManager {
@@ -84,6 +90,7 @@ public abstract class OpModeExtended extends OpMode {
         }
         public final void update() {
             autoupdate();
+
             try {
                 manager.getInterpreter().getRuntime().callFunction("update");
             } catch (LispException e) {

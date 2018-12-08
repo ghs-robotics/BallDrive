@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.core.path;
 
+import android.graphics.Path;
+
 import static java.lang.Math.abs;
 
 public class PathFactory {
@@ -15,6 +17,10 @@ public class PathFactory {
     double max_vel, max_acc;
 
     public double timestep;
+
+    public PathFactory(double[] pathVars) {
+        this(pathVars[0], pathVars[1], pathVars[2], pathVars[3], pathVars[4], pathVars[5], pathVars[6]);
+    }
 
     public PathFactory(double i_pos, double i_vel, double f_pos, double f_vel, double max_vel, double max_acc, double timestep) {
         this.i_pos = i_pos;
