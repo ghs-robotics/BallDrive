@@ -59,12 +59,15 @@ public class MainInterface extends JavaInterface {
     }
 
     private LispObject dropFun(LispObject[] params) throws LispException {
-        //checkParams("drop", params, new Class[] {}, false);
+        checkParams("drop", params, new Class[] { Number.class }, false);
+
+        double time = getAsDoubles(params)[0];
+
         ReleaseStage currMode = (ReleaseStage) lift.getSetting("releaseMode");
         if (currMode.equals(ReleaseStage.CLOSED)) {
             lift.setting("releaseMode", ReleaseStage.SLIDE_OPEN);
             lift.setting("power", -1);
-            lift.setting("powerTime", 1);
+            lift.setting("powerTime", time);
         } else if (currMode.equals(ReleaseStage.OPEN)) {
             return new LispObject.Boolean(true);
         }

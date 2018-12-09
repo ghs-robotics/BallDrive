@@ -3,5 +3,5 @@
 (define (init) #t)
 (define (update)
   (when do-drive
-    (when (path 0 0 1000 0 1000 300 0.1)
+    (when (drop 3)
       (set! do-drive #f))))
