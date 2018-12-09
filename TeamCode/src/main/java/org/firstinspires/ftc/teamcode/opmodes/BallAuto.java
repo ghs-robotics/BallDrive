@@ -27,7 +27,7 @@ public class BallAuto extends OpModeExtended {
 
         @Override
         public void autoinit() {
-            teaLispFile = new File("./storage/emulated/0/bluetooth/drop.tl");
+            teaLispFile = new File("./storage/emulated/0/bluetooth/ballauto.tl");
             drive = (DriveSubsystem) Registry.getSubsystemByName("driveSubsystem");
             drive.setting("mode", DriveSubsystem.Mode.AUTO_IDLE);
             lift = (LiftSubsystem) Registry.getSubsystemByName("liftSubsystem");
