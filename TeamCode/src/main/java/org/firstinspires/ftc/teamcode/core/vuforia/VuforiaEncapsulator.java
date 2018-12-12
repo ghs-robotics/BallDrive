@@ -29,11 +29,13 @@
 
 package org.firstinspires.ftc.teamcode.core.vuforia;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -47,6 +49,10 @@ import org.firstinspires.ftc.teamcode.core.structure.SensorManager;
 import org.firstinspires.ftc.teamcode.core.structure.Subsystem;
 import org.majora320.tealisp.evaluator.JavaInterface;
 
+import org.opencv.android.Utils;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -55,6 +61,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
+import java.util.concurrent.locks.LockSupport;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
@@ -108,10 +115,6 @@ public class VuforiaEncapsulator {
     private static final float mmFTCFieldWidth  = (12*6) * mmPerInch;       // the width of the FTC field (from the center point to the outer panels)
     private static final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
 
-    // Select which camera you want use.  The FRONT camera is the one on the same side as the screen.
-    // Valid choices are:  BACK or FRONT
-    private static VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-
     private OpenGLMatrix lastLocation = null;
     private boolean targetVisible = false;
 
@@ -120,30 +123,26 @@ public class VuforiaEncapsulator {
      * localization engine.
      */
     private VuforiaLocalizer vuforia;
+    private VuforiaLocalizerImplSubclass vuforiaLocalizer;
 
-    private int cameraMonitorViewId;
     private VuforiaLocalizer.Parameters parameters;
     private VuforiaTrackables targetsRoverRuckus;
-    private VuforiaTrackable blueRover;
-    private VuforiaTrackable redFootprint;
-    private VuforiaTrackable frontCraters;
-    private VuforiaTrackable backSpace;
     private List<VuforiaTrackable> allTrackables;
-    private OpenGLMatrix blueRoverLocationOnField;
-    private OpenGLMatrix redFootprintLocationOnField;
-    private OpenGLMatrix frontCratersLocationOnField;
-    private OpenGLMatrix backSpaceLocationOnField;
     private OpenGLMatrix phoneLocationOnRobot;
-    private OpenGLMatrix robotLocationTransform;
     private VectorF translation;
-    Orientation rotation;
+    private Orientation rotation;
 
     // Camera location and rotation
     private int CAMERA_FORWARD_DISPLACEMENT;   // eg: Camera is 110 mm in front of robot center
     private int CAMERA_VERTICAL_DISPLACEMENT;   // eg: Camera is 200 mm above ground
     private int CAMERA_LEFT_DISPLACEMENT;     // eg: Camera is ON the robot's center line
 
+//    public Image rgb;
+
     public VuforiaEncapsulator(String camera_side, int camera_forward_displace, int camera_vertical_displace, int camera_horizontal_displace, HardwareMap hardwareMap) {
+        // Select which camera you want use.  The FRONT camera is the one on the same side as the screen.
+        // Valid choices are:  BACK or FRONT
+        VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
         if(camera_side.equals("FRONT")) {
             CAMERA_CHOICE = FRONT;
         } else {
@@ -159,7 +158,7 @@ public class VuforiaEncapsulator {
          * We can pass Vuforia the handle to a camera preview resource (on the RC phone);
          * If no camera monitor is desired, use the parameterless constructor instead (commented out below).
          */
-        cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY ;
@@ -171,13 +170,13 @@ public class VuforiaEncapsulator {
         // Load the data sets that for the trackable objects. These particular data
         // sets are stored in the 'assets' part of our application.
         targetsRoverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
-        blueRover = targetsRoverRuckus.get(0);
+        VuforiaTrackable blueRover = targetsRoverRuckus.get(0);
         blueRover.setName("Blue-Rover");
-        redFootprint = targetsRoverRuckus.get(1);
+        VuforiaTrackable redFootprint = targetsRoverRuckus.get(1);
         redFootprint.setName("Red-Footprint");
-        frontCraters = targetsRoverRuckus.get(2);
+        VuforiaTrackable frontCraters = targetsRoverRuckus.get(2);
         frontCraters.setName("Front-Craters");
-        backSpace = targetsRoverRuckus.get(3);
+        VuforiaTrackable backSpace = targetsRoverRuckus.get(3);
         backSpace.setName("Back-Space");
 
         // For convenience, gather together all the trackable objects in one easily-iterable collection */
@@ -209,7 +208,7 @@ public class VuforiaEncapsulator {
          * - First we rotate it 90 around the field's X axis to flip it upright.
          * - Then, we translate it along the Y axis to the blue perimeter wall.
          */
-        blueRoverLocationOnField = OpenGLMatrix
+        OpenGLMatrix blueRoverLocationOnField = OpenGLMatrix
                 .translation(0, mmFTCFieldWidth, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0));
         blueRover.setLocation(blueRoverLocationOnField);
@@ -221,7 +220,7 @@ public class VuforiaEncapsulator {
          *   and facing inwards to the center of the field.
          * - Then, we translate it along the negative Y axis to the red perimeter wall.
          */
-        redFootprintLocationOnField = OpenGLMatrix
+        OpenGLMatrix redFootprintLocationOnField = OpenGLMatrix
                 .translation(0, -mmFTCFieldWidth, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180));
         redFootprint.setLocation(redFootprintLocationOnField);
@@ -233,9 +232,9 @@ public class VuforiaEncapsulator {
          *   and facing inwards to the center of the field.
          * - Then, we translate it along the negative X axis to the front perimeter wall.
          */
-        frontCratersLocationOnField = OpenGLMatrix
+        OpenGLMatrix frontCratersLocationOnField = OpenGLMatrix
                 .translation(-mmFTCFieldWidth, 0, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90));
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 90));
         frontCraters.setLocation(frontCratersLocationOnField);
 
         /*
@@ -245,7 +244,7 @@ public class VuforiaEncapsulator {
          *   and facing inwards to the center of the field.
          * - Then, we translate it along the X axis to the back perimeter wall.
          */
-        backSpaceLocationOnField = OpenGLMatrix
+        OpenGLMatrix backSpaceLocationOnField = OpenGLMatrix
                 .translation(mmFTCFieldWidth, 0, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
         backSpace.setLocation(backSpaceLocationOnField);
@@ -279,6 +278,8 @@ public class VuforiaEncapsulator {
                         CAMERA_CHOICE == FRONT ? 90 : -90, 0, 0));
         translation = new VectorF(0,0,0);
         rotation = new Orientation();
+
+        vuforiaLocalizer = new VuforiaLocalizerImplSubclass(parameters);
     }
 
     public void init() {
@@ -301,7 +302,7 @@ public class VuforiaEncapsulator {
 
                 // getUpdatedRobotLocation() will return null if no new information is available since
                 // the last time that call was made, or if the trackable is not currently visible.
-                robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
                 if (robotLocationTransform != null) {
                     lastLocation = robotLocationTransform;
                 }
@@ -318,6 +319,8 @@ public class VuforiaEncapsulator {
             rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
         }
     }
+
+    public boolean isTargetVisible() { return targetVisible; }
 
     // Return X, Y, and Z Translations Individually
     public float getX() {
@@ -365,6 +368,30 @@ public class VuforiaEncapsulator {
             return "unknown";
         }
         return "Position: " + getX() + ", " + getY() + ", " + getZ() + " | Rotation: " + getRoll() + ", " + getPitch() + ", " + getHeading();
+    }
+
+    public Mat getFrame() {
+        int counter = -1;
+        Bitmap bm = null;
+
+        // Spin until we get a frame
+        while (bm == null) {
+            if (vuforiaLocalizer.rgb != null) {
+                bm = Bitmap.createBitmap(vuforiaLocalizer.rgb.getWidth(),
+                        vuforiaLocalizer.rgb.getHeight(),
+                        Bitmap.Config.RGB_565);
+                LockSupport.parkNanos(1_000_000);
+                if (++counter % 1000 == 0) {
+                    Log.d("team-code", "Vuforia getFrame spun for " + counter + " iterations");
+                }
+            }
+        }
+
+        bm.copyPixelsFromBuffer(vuforiaLocalizer.rgb.getPixels());
+
+        Mat tmp = new Mat(bm.getWidth(), bm.getHeight(), CvType.CV_8UC4);
+        Utils.bitmapToMat(bm, tmp);
+        return tmp;
     }
 
     public ClassHolder getSensors(OpModeExtended context) {

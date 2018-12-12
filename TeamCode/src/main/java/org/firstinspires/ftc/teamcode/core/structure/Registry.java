@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.core.structure;
 
 import android.util.Log;
 
+import org.firstinspires.ftc.teamcode.core.vuforia.VuforiaEncapsulator;
 import org.majora320.tealisp.evaluator.JavaInterface;
 
 import java.util.HashMap;
@@ -13,6 +14,7 @@ public class Registry {
     private static Map<String, SensorManager> sensors = new HashMap<>();
     private static Map<String, Subsystem> subsystems = new HashMap<>();
     private static Map<String, JavaInterface> interfaces = new HashMap<>();
+    private static VuforiaEncapsulator vuforia = null;
 
     public static void grabData(ClassHolder classHolder) {
         if (classHolder == null) {
@@ -49,6 +51,10 @@ public class Registry {
         if (interfaces == null)
             Log.w("team-code", "interfaces null, but attempt made to add Interface");
         interfaces.put(name, iface);
+    }
+
+    public static void setVuforia(VuforiaEncapsulator encapsulator) {
+        vuforia = encapsulator;
     }
 
     public static SensorManager getSensorManagerByName(String name) {
@@ -89,6 +95,10 @@ public class Registry {
             Log.w("team-code", "attempt to fetch interfaces, but it is null");
         }
         return new HashSet<>(interfaces.values());
+    }
+
+    public static VuforiaEncapsulator getVuforia() {
+        return vuforia;
     }
 
     public static void initSensors() {

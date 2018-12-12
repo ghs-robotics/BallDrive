@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.core.vuforia;
 
 import org.firstinspires.ftc.teamcode.core.structure.Registry;
 import org.firstinspires.ftc.teamcode.core.structure.SensorManager;
+import org.opencv.core.Mat;
 
 import java.util.Vector;
 
 public class VuforiaFacade {
     private SensorManager x, y, z, pitch, roll, heading;
+    private VuforiaEncapsulator vuforia;
 
     public VuforiaFacade() {
         this.x = Registry.getSensorManagerByName("VuforiaX");
@@ -15,6 +17,15 @@ public class VuforiaFacade {
         this.pitch = Registry.getSensorManagerByName("VuforiaPitch");
         this.roll = Registry.getSensorManagerByName("VuforiaRoll");
         this.heading = Registry.getSensorManagerByName("VuforiaHeading");
+        this.vuforia = Registry.getVuforia();
+    }
+
+    public boolean isTargetVisible() {
+        return vuforia.isTargetVisible();
+    }
+
+    public Mat getFrame() {
+        return vuforia.getFrame();
     }
 
     public double getX() {
