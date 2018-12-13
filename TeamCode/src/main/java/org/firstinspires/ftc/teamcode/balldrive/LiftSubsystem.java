@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.balldrive;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.core.OpModeExtended;
@@ -53,12 +55,13 @@ public class LiftSubsystem extends Subsystem {
         switch (releaseMode) {
             case SLIDE_OPEN: //Start sliding open by moving the motor
                 actuator.open();
-                actuator.setLift(1);
+                actuator.setLift(-1);
                 releaseTimer.reset();
                 releaseMode = ReleaseStage.OPENING;
                 break;
             case OPENING: //When enough time has passed, open the servo
-                if (releaseTimer.seconds() > .1) { //TODO: TUNE THIS
+                Log.i("team-code", "time: " + releaseTimer.seconds());
+                if (releaseTimer.seconds() > .3) { //TODO: TUNE THIS
                     actuator.setLift(0);
                     releaseMode = ReleaseStage.LOWER;
                     powerTimer.reset();
