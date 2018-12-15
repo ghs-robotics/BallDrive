@@ -22,21 +22,47 @@ public class BallTeleOp extends OpModeExtended {
     }
 
     public class TICM extends OpModeExtended.TeleInputControlManager {
-        Subsystem drive, lift;
+        Subsystem drive, lift, intake;
+        int i;
         public void teleinit() {
             drive = Registry.getSubsystemByName("driveSubsystem");
             lift = Registry.getSubsystemByName("liftSubsystem");
+            intake = Registry.getSubsystemByName("intakeSubsystem");
 
             drive.setting("mode", DriveSubsystem.Mode.MANUAL_LRS);
             lift.setting("releaseMode", LiftSubsystem.ReleaseStage.LOWER);
             lift.setting("powerTime", 0);
             lift.setting("power", 0);
+            intake.setting("slidePower", 0);
+            intake.setting("intakePower", 0);
         }
         public void teleupdate() {
             switchDriveMode();
             lift();
             pawl();
             drive();
+            intakeStuff();
+            slideStuff();
+        }
+
+        private void intakeStuff() {
+            if (gamepadExtended2.left_trigger > GamepadExtended.DEADZONE) {
+                intake.setting("intakePower", -gamepadExtended1.left_trigger);
+            } else if (gamepadExtended2.right_trigger > GamepadExtended.DEADZONE) {
+                intake.setting("intakePower", gamepadExtended1.right_trigger);
+            } else {
+                intake.setting("intakePower", 0);
+            }
+        }
+
+        private void slideStuff() {
+            if (gamepadExtended2.left_stick_y > .2) {
+                intake.setting("slidePower", gamepadExtended2.left_stick_y);
+            } else if (gamepadExtended2.left_stick_y < -.2) {
+                intake.setting("slidePower", gamepadExtended2.left_stick_y);
+            } else {
+                intake.setting("intakePower", 0);
+            }
         }
 
         private void switchDriveMode() {
@@ -54,18 +80,21 @@ public class BallTeleOp extends OpModeExtended {
         }
 
         private void lift() {
-            if (gamepadExtended1.left_trigger > GamepadExtended.DEADZONE) {
-                lift.setting("power", -gamepadExtended1.left_trigger);
-            } else if (gamepadExtended1.right_trigger > GamepadExtended.DEADZONE) {
-                lift.setting("power", gamepadExtended1.right_trigger);
-            } else {
-                lift.setting("power", 0);
+            if(i % 2 == 1) {
+                if (gamepadExtended1.left_trigger > GamepadExtended.DEADZONE) {
+                    lift.setting("power", -gamepadExtended1.left_trigger);
+                } else if (gamepadExtended1.right_trigger > GamepadExtended.DEADZONE) {
+                    lift.setting("power", gamepadExtended1.right_trigger);
+                } else {
+                    lift.setting("power", 0);
+                }
             }
         }
 
         private void pawl() {
             if (gamepadExtended1.y.equals(GamepadExtended.ButtonState.UPPING)) {
                 lift.setting("toggle", true);
+                i++;
             }
         }
 

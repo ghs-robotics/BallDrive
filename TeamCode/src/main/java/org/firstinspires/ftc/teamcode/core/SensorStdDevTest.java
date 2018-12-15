@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.apache.commons.math3.stat.regression.RegressionResults;
 
+import java.io.File;
 import java.util.ArrayList;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -32,14 +33,12 @@ public class SensorStdDevTest extends OpModeExtended {
 
     public class AICM extends OpModeExtended.AutoInputControlManager {
         DriveSubsystem drive;
-        LiftSubsystem lift;
+
+
 
         static final int NUM_VOLTAGES = 100;
         AnalogInput ultrasonic;
         double[] voltageList;
-        double sum;
-        double mean;
-        double stdDev;
         double[][] x;
         ElapsedTime timer = new ElapsedTime();
         SimpleRegression regression;
@@ -47,35 +46,37 @@ public class SensorStdDevTest extends OpModeExtended {
 
         @Override
         public void autoinit() {
+            teaLispFile = new File("./storage/emulated/0/bluetooth/one-motion.tl");
             ultrasonic = hardwareMap.analogInput.get("ultra");
             timer.reset();
-
-
+            drive = (DriveSubsystem) Registry.getSubsystemByName("driveSubsystem");
+            drive.setting("mode", DriveSubsystem.Mode.MANUAL_LRS);
             SimpleRegression regression = new SimpleRegression();
-            drive.setting("autoL", 1.0);
-            drive.setting("autoR", 1.0);
-
+            voltageList = new double[100];
+            x = new double[100][0];
+            telemetry.addData("poop:", 3);
 
         }
 
         @Override
         public void autoupdate() {
+            drive.setting("mode", DriveSubsystem.Mode.MANUAL_LRS);
+            drive.setting("manualL", 1.0);
+            drive.setting("manualR", 1.0);
             double currentVoltage = ultrasonic.getVoltage();
+            telemetry.addData("Voltage", currentVoltage);
+            telemetry.addData("aaron", i);
 
-
-            if (voltageList.length < NUM_VOLTAGES) {
+            if (i < 100) {
                 voltageList[i] = currentVoltage;
                 x[i][0] = timer.milliseconds();
-                i++;
             } else {
                 regression.addObservations(x, voltageList);
                 RegressionResults lol = regression.regress();
                 telemetry.addData("hi brenda:", Math.sqrt(lol.getErrorSumSquares() / lol.getN()));
-                telemetry.addData("aaron:", lol.getAdjustedRSquared());
+                telemetry.addData("aaron", lol.getRSquared());
             }
-
-
-            telemetry.addData("Voltage", currentVoltage);
+            i++;
 
             telemetry.update();
         }
