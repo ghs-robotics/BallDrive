@@ -26,4 +26,8 @@ android {
 dependencies {
     implementation project(':FtcRobotController')
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
+
+
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+    implementation project(':Tealisp')
 }

@@ -9,42 +9,47 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Drivebase {
-    public DcMotor leftFrontDrive;
-    public DcMotor leftBackDrive;
-    public DcMotor rightFrontDrive;
-    public DcMotor rightBackDrive;
+    public DcMotor leftMotor;
+    public DcMotor rightMotor;
+    public DcMotor backMotor;
 
-
+    public List<DcMotor> motors;
 
     public Drivebase(HardwareMap hardwareMap, Telemetry telemetry){
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "leftFront");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "leftBack");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "rightBack");
+        leftMotor = hardwareMap.get(DcMotor.class, "left");
+        rightMotor = hardwareMap.get(DcMotor.class, "right");
+        backMotor = hardwareMap.get(DcMotor.class, "back");
 
-        leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motors = Arrays.asList(leftMotor, rightMotor, backMotor);
+
+        for (int i = 0; i < motors.size(); i++)
+            motors.get(i).setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         telemetry.update();
     }
 
-    public void calculateDrivePowers(double y, double x, double rot){
-        rot = -rot;
-        double lf = rot - x + y;
-        double lb = rot + x + y;
-        double rf = rot - x - y;
-        double rb = rot + x - y;
-
-        setDrivePowers(lf, lb, rf, rb);
+    //regular controls in theory
+    public void sendDrivePowers(double y, double x, double rot){
+        if (Math.abs(rot) > 0.01)
+            setDrivePowers(y, y, x);
+        else
+            setDrivePowers(rot, -rot, x);
     }
 
-    public void setDrivePowers(double lf, double lb, double rf, double rb){
-        leftFrontDrive.setPower(lf);
-        leftBackDrive.setPower(lb);
-        rightFrontDrive.setPower(rf);
-        rightBackDrive.setPower(rb);
+    //potential improved version of the one above
+    public void calculateDrivePowers(double y, double x, double rot){
+        rot = -rot;
+        double l = y + rot;
+        double r = y - rot;
+        double b = x;
+
+        setDrivePowers(l, r, b);
+    }
+
+    public void setDrivePowers(double l, double r, double b){
+        leftMotor.setPower(l);
+        rightMotor.setPower(r);
+        backMotor.setPower(b);
     }
 
 }

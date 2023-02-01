@@ -1,26 +1,66 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.balldrive.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.robot.Drivebase;
+import org.firstinspires.ftc.teamcode.balldrive.structure.ClassHolder;
+import org.firstinspires.ftc.teamcode.balldrive.iobuiltin.GamepadExtended;
+import org.firstinspires.ftc.teamcode.balldrive.OpModeExtended;
+import org.firstinspires.ftc.teamcode.balldrive.structure.Registry;
+import org.firstinspires.ftc.teamcode.balldrive.structure.Subsystem;
 
 @TeleOp(name = "bla Teleop", group = "tele")
-public class BallDrive extends LinearOpMode {
-    Drivebase robot;
+class BallTeleOp extends OpModeExtended {
 
-    @Override
-    public void runOpMode() throws InterruptedException {
-        robot = new Drivebase(hardwareMap, telemetry);
+    public OpModeExtended.InputControlManager getInputControlManager() {
+        return new BallTeleOp.TICM();
+    }
 
-        //left stick y controls forward backward. Orientation on controller: |
-        //left stick x controls strafing sideways. Orientation on controller: -
-        //right stick x controls rotation in place. Orientation on controller: -
-        while (opModeIsActive()){
-            robot.calculateDrivePowers(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+    public ClassHolder getClassHolder() {
+        return new org.firstinspires.ftc.teamcode.balldrive.structure.Holder(this);
+    }
+
+    public class TICM extends OpModeExtended.TeleInputControlManager {
+        Subsystem drive;
+        int i;
+        public void teleinit() {
+            drive = Registry.getSubsystemByName("driveSubsystem");
+
+            drive.setting("mode", DriveSubsystem.Mode.MANUAL_LRS);
+        }
+        public void teleupdate() {
+            switchDriveMode();
+            drive();
+
+        }
+
+        private void switchDriveMode() {
+            if (gamepadExtended1.a == GamepadExtended.ButtonState.DOWNING) {
+                DriveSubsystem.Mode mode = (DriveSubsystem.Mode) drive.getSetting("mode");
+                switch (mode) {
+                    case MANUAL_XYR:
+                        drive.setting("mode", DriveSubsystem.Mode.MANUAL_LRS);
+                        break;
+                    case MANUAL_LRS:
+                        drive.setting("mode", DriveSubsystem.Mode.MANUAL_XYR);
+                        break;
+                }
+            }
+        }
+
+        private void drive() {
+            switch ((DriveSubsystem.Mode) drive.getSetting("mode")) {
+                case MANUAL_LRS:
+                    drive.setting("manualL", -gamepadExtended1.left_stick_y);
+                    drive.setting("manualR", -gamepadExtended1.right_stick_y);
+                    drive.setting("manualS", (gamepadExtended1.left_stick_x + gamepadExtended1.right_stick_x) / 2);
+                    break;
+                case MANUAL_XYR:
+                    drive.setting("manualX", gamepadExtended1.left_stick_x);
+                    drive.setting("manualY", -gamepadExtended1.left_stick_y);
+                    drive.setting("manualR", -gamepadExtended1.right_stick_x);
+                    break;
+            }
         }
     }
 }

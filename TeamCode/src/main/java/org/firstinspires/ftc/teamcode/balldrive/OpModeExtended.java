@@ -1,17 +1,18 @@
-package org.firstinspires.ftc.teamcode.core;
+package org.firstinspires.ftc.teamcode.balldrive;
 
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.balldrive.structure.Registry;
 import org.majora320.tealisp.evaluator.LispException;
 
 import java.io.File;
-import org.firstinspires.ftc.teamcode.core.iobuiltin.GamepadExtended;
-import org.firstinspires.ftc.teamcode.core.structure.ClassHolder;
-import org.firstinspires.ftc.teamcode.core.structure.Registry;
-import org.firstinspires.ftc.teamcode.core.tealisp.TealispFileManager;
-import org.firstinspires.ftc.teamcode.core.tealisp.TealispSubsystemInterface;
+import org.firstinspires.ftc.teamcode.balldrive.iobuiltin.GamepadExtended;
+import org.firstinspires.ftc.teamcode.balldrive.structure.ClassHolder;
+import org.firstinspires.ftc.teamcode.balldrive.structure.Registry;
+import org.firstinspires.ftc.teamcode.balldrive.tealisp.TealispFileManager;
+import org.firstinspires.ftc.teamcode.balldrive.tealisp.TealispSubsystemInterface;
 
 import static org.apache.commons.lang3.exception.ExceptionUtils.getStackTrace;
 
@@ -37,7 +38,6 @@ public abstract class OpModeExtended extends OpMode {
             gamepadExtended2.update();
 
             Registry.grabData(classHolder);
-            Registry.initSensors();
             Registry.initSubsystems();
             inputControlManager.init();
         } catch (Exception e) {
@@ -54,7 +54,6 @@ public abstract class OpModeExtended extends OpMode {
         try {
             gamepadExtended1.update();
             gamepadExtended2.update();
-            Registry.updateSensors();
             Registry.updateSubsystemData();
             inputControlManager.update();
             Registry.updateSubsystemActuators();

@@ -2,12 +2,9 @@ package org.firstinspires.ftc.teamcode.balldrive;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.core.OpModeExtended;
-import org.firstinspires.ftc.teamcode.core.structure.Setting;
-import org.firstinspires.ftc.teamcode.core.structure.Subsystem;
-import org.firstinspires.ftc.teamcode.core.path.PathData;
-import org.firstinspires.ftc.teamcode.core.path.PathFactory;
-import org.firstinspires.ftc.teamcode.core.path.PathState;
+import org.firstinspires.ftc.teamcode.balldrive.OpModeExtended;
+import org.firstinspires.ftc.teamcode.balldrive.structure.Setting;
+import org.firstinspires.ftc.teamcode.balldrive.structure.Subsystem;
 
 public class DriveSubsystem extends Subsystem {
     private OpModeExtended context;
@@ -58,13 +55,6 @@ public class DriveSubsystem extends Subsystem {
 
     @Setting
     public ElapsedTime timer;
-
-    @Setting
-    public PathData pathS;
-    @Setting
-    public PathData pathL;
-    @Setting
-    public PathData pathR;
 
     private double startTime;
 
@@ -122,42 +112,7 @@ public class DriveSubsystem extends Subsystem {
                 finalS = 0;
                 mode = Mode.AUTO_IDLE;
                 break;
-            case PATH_INIT: //Runs once to calculate a path for the robot
-                startTime = currTime();
 
-                PathFactory factoryS = new PathFactory(sPathVars);
-                pathS = factoryS.data;
-                PathFactory factoryL = new PathFactory(lPathVars);
-                pathL = factoryL.data;
-                PathFactory factoryR = new PathFactory(rPathVars);
-                pathR = factoryR.data;
-
-                mode = Mode.PATH;
-                break;
-            case PATH: //Runs every loop cycle to execute the path
-                PathState nextStateS = pathS.getForTime(currTime() - startTime);
-                PathState nextStateR = pathR.getForTime(currTime() - startTime);
-                PathState nextStateL = pathL.getForTime(currTime() - startTime);
-
-                if (nextStateS.equals(PathState.END_POINT) && nextStateL.equals(PathState.END_POINT) && nextStateR.equals(PathState.END_POINT)) {
-                    mode = Mode.PATH_STOP;
-                } else {
-                    context.telemetry.addData("l input", nextStateL.vel);
-                    context.telemetry.addData("r input", nextStateR.vel);
-                    context.telemetry.addData("s input", nextStateS.vel);
-
-                    lrsFromXYR(nextStateL.vel, nextStateR.vel, nextStateS.vel);
-                    /*finalS = nextStateS.vel;
-                    finalR = nextStateR.vel;
-                    finalL = nextStateL.vel;*/
-                }
-                break;
-            case PATH_STOP: //Runs once to stop the robot
-                finalS = 0;
-                finalR = 0;
-                finalL = 0;
-                mode = Mode.AUTO_IDLE;
-                break;
         }
     }
 

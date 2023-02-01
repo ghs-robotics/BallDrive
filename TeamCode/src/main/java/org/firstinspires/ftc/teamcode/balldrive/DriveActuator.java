@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.core.OpModeExtended;
+import org.firstinspires.ftc.teamcode.balldrive.OpModeExtended;
 
 public class DriveActuator {
 
