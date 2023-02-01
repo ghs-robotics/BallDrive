@@ -1,25 +1,32 @@
+/**
+ * Top-level build file for ftc_app project.
+ *
+ * It is extraordinarily rare that you will ever need to edit this file.
+ */
+
 buildscript {
-    ext.ftc_version = '4.0'
-
     repositories {
+        mavenCentral()
         google()
-        jcenter()
     }
-
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1';
-    }
-
-    allprojects {
-        repositories {
-            jcenter()
-            google()
-            maven { url 'https://jitpack.io' }
-            maven {
-                url "https://raw.githubusercontent.com/Pattonville-Robotics/ftc-lib-repo/mvn-repo/"
-            }
-        }
+        classpath 'com.android.tools.build:gradle:7.2.0'
     }
 }
 
+// This is now required because aapt2 has to be downloaded from the
+// google() repository beginning with version 3.2 of the Android Gradle Plugin
+allprojects {
+    repositories {
+        mavenCentral()
+        google()
+    }
+}
 
+repositories {
+    mavenCentral()
+
+    flatDir {
+        dirs '../libs'
+    }
+}
