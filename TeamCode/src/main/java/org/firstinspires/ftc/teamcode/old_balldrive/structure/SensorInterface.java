@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.balldrive.structure;
+package org.firstinspires.ftc.teamcode.old_balldrive.structure;
 
 public interface SensorInterface {
     void init();

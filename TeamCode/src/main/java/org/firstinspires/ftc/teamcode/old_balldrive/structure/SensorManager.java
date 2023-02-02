@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.balldrive.structure;
+package org.firstinspires.ftc.teamcode.old_balldrive.structure;
 
-import org.firstinspires.ftc.teamcode.balldrive.OpModeExtended;
+import org.firstinspires.ftc.teamcode.old_balldrive.OpModeExtended;
 
 import java.util.ArrayList;
 

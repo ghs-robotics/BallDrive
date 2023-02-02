@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.balldrive.tealisp;
+package org.firstinspires.ftc.teamcode.old_balldrive.tealisp;
 
-import org.firstinspires.ftc.teamcode.balldrive.structure.Registry;
+import org.firstinspires.ftc.teamcode.old_balldrive.structure.Registry;
 import org.majora320.tealisp.evaluator.JavaInterface;
 import org.majora320.tealisp.evaluator.LispException;
 import org.majora320.tealisp.evaluator.LispObject;

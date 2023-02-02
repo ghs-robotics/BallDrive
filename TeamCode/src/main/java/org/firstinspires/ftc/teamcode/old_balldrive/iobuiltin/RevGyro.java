@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.balldrive.iobuiltin;
+package org.firstinspires.ftc.teamcode.old_balldrive.iobuiltin;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
@@ -11,9 +11,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Axis;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.balldrive.OpModeExtended;
-import org.firstinspires.ftc.teamcode.balldrive.structure.SensorInterface;
-import org.firstinspires.ftc.teamcode.balldrive.structure.Setting;
+import org.firstinspires.ftc.teamcode.old_balldrive.OpModeExtended;
+import org.firstinspires.ftc.teamcode.old_balldrive.structure.SensorInterface;
 
 public class RevGyro implements SensorInterface {
 

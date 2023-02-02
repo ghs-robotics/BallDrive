@@ -1,9 +1,8 @@
-package org.firstinspires.ftc.teamcode.balldrive.structure;
+package org.firstinspires.ftc.teamcode.old_balldrive.structure;
 
 import android.util.Log;
 
-import org.firstinspires.ftc.teamcode.balldrive.OpModeExtended;
-import org.firstinspires.ftc.teamcode.balldrive.structure.Setting;
+import org.firstinspires.ftc.teamcode.old_balldrive.OpModeExtended;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -29,7 +28,7 @@ public abstract class Subsystem {
             String name = field.getName();
             Annotation[] annotations = field.getDeclaredAnnotations();
             for (Annotation annotation : annotations) {
-                if (annotation instanceof org.firstinspires.ftc.teamcode.balldrive.structure.Setting) {
+                if (annotation instanceof org.firstinspires.ftc.teamcode.old_balldrive.structure.Setting) {
                     settings.put(name, field);
                 }
             }

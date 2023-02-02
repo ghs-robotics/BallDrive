@@ -1,11 +1,7 @@
-package org.firstinspires.ftc.teamcode.balldrive.structure;
+package org.firstinspires.ftc.teamcode.old_balldrive.structure;
 
-import org.firstinspires.ftc.teamcode.balldrive.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.balldrive.iobuiltin.RevGyro;
-import org.firstinspires.ftc.teamcode.balldrive.structure.ClassHolder;
-import org.firstinspires.ftc.teamcode.balldrive.OpModeExtended;
-import org.firstinspires.ftc.teamcode.balldrive.structure.MainInterface;
-import org.firstinspires.ftc.teamcode.balldrive.structure.Subsystem;
+import org.firstinspires.ftc.teamcode.old_balldrive.DriveSubsystem;
+import org.firstinspires.ftc.teamcode.old_balldrive.OpModeExtended;
 import org.majora320.tealisp.evaluator.JavaInterface;
 
 import java.util.HashMap;

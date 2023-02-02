@@ -3,21 +3,44 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.inputs.DriveType;
 import org.firstinspires.ftc.teamcode.robot.Drivebase;
+import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @TeleOp
 public class Tele extends LinearOpMode {
 
-    Drivebase robot;
+    Robot robot;
+    DriveType dT;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Drivebase(hardwareMap, telemetry);
+        robot = new Robot(hardwareMap, telemetry);
+        dT = new DriveType();
 
+        int counter = 0;
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
+
+        waitForStart();
         while (opModeIsActive()){
-        //left stick y controls forward backward. Orientation on controller: |
-        //left stick x controls strafing sideways. Orientation on controller: -
-        //right stick x controls rotation in place. Orientation on controller: -
+            double triggers = gamepad1.right_trigger -gamepad1.left_trigger;
+            int driveMode = counter % 3;
+
+            if (gamepad1.left_bumper && gamepad1.right_bumper)
+                counter++;
+
+            if (driveMode == 0)
+                robot.drive.calculateDrivePowers(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            else if (driveMode == 1)
+                robot.drive.metaDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            else
+                robot.drive.setDrivePowers(gamepad1.left_stick_y, gamepad1.right_stick_y, triggers);
+
+
+            telemetry.addData("mode", dT.driveMode(driveMode));
+            telemetry.update();
         }
     }
 }

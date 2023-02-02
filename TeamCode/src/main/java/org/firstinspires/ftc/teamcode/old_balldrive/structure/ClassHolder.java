@@ -1,9 +1,6 @@
-package org.firstinspires.ftc.teamcode.balldrive.structure;
+package org.firstinspires.ftc.teamcode.old_balldrive.structure;
 
-import android.hardware.SensorManager;
-
-import org.firstinspires.ftc.teamcode.balldrive.OpModeExtended;
-import org.firstinspires.ftc.teamcode.balldrive.structure.Subsystem;
+import org.firstinspires.ftc.teamcode.old_balldrive.OpModeExtended;
 import org.majora320.tealisp.evaluator.JavaInterface;
 
 import java.util.Map;

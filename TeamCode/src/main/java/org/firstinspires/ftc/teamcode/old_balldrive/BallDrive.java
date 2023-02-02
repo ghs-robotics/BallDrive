@@ -1,23 +1,21 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.old_balldrive;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.balldrive.DriveSubsystem;
-import org.firstinspires.ftc.teamcode.balldrive.structure.ClassHolder;
-import org.firstinspires.ftc.teamcode.balldrive.iobuiltin.GamepadExtended;
-import org.firstinspires.ftc.teamcode.balldrive.OpModeExtended;
-import org.firstinspires.ftc.teamcode.balldrive.structure.Registry;
-import org.firstinspires.ftc.teamcode.balldrive.structure.Subsystem;
+import org.firstinspires.ftc.teamcode.old_balldrive.structure.ClassHolder;
+import org.firstinspires.ftc.teamcode.old_balldrive.iobuiltin.GamepadExtended;
+import org.firstinspires.ftc.teamcode.old_balldrive.structure.Registry;
+import org.firstinspires.ftc.teamcode.old_balldrive.structure.Subsystem;
 
-@TeleOp(name = "bla Teleop", group = "tele")
-class BallTeleOp extends OpModeExtended {
+@TeleOp(name = "bla drive", group = "tele")
+public class BallDrive extends OpModeExtended {
 
     public OpModeExtended.InputControlManager getInputControlManager() {
-        return new BallTeleOp.TICM();
+        return new BallDrive.TICM();
     }
 
     public ClassHolder getClassHolder() {
-        return new org.firstinspires.ftc.teamcode.balldrive.structure.Holder(this);
+        return new org.firstinspires.ftc.teamcode.old_balldrive.structure.Holder(this);
     }
 
     public class TICM extends OpModeExtended.TeleInputControlManager {

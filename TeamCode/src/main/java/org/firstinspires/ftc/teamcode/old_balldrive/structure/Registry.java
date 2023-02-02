@@ -1,10 +1,8 @@
-package org.firstinspires.ftc.teamcode.balldrive.structure;
+package org.firstinspires.ftc.teamcode.old_balldrive.structure;
 
 import android.util.Log;
 
 import org.majora320.tealisp.evaluator.JavaInterface;
-
-import org.firstinspires.ftc.teamcode.balldrive.structure.Subsystem;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,7 +12,7 @@ import java.util.Set;
 
 
 public class Registry {
-    private static Map<String, org.firstinspires.ftc.teamcode.balldrive.structure.SensorManager> sensors = new HashMap<>();
+    private static Map<String, org.firstinspires.ftc.teamcode.old_balldrive.structure.SensorManager> sensors = new HashMap<>();
     private static Map<String, Subsystem> subsystems = new HashMap<>();
     private static Map<String, JavaInterface> interfaces = new HashMap<>();
     public static void grabData(ClassHolder classHolder) {
@@ -29,7 +27,7 @@ public class Registry {
         interfaces.putAll(classHolder.getInterfaces());
     }
 
-    public static void addSensorManager(String name, org.firstinspires.ftc.teamcode.balldrive.structure.SensorManager sensor) {
+    public static void addSensorManager(String name, org.firstinspires.ftc.teamcode.old_balldrive.structure.SensorManager sensor) {
         Log.d("team-code", "adding SensorManager " + name
                 + (sensor == null ? " (null)" : " (nonnull)"));
         if (sensors == null)
