@@ -34,18 +34,18 @@ public class Drivebase {
             motors.get(i).setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         }
 
-        gyro = new Gyro();
+        gyro = new Gyro(hardwareMap);
 
         telemetry.update();
     }
 
     public void metaDrive (double y, double x, double rot){
-        double angle = gyro.getAngleRad();
+        //double angle = gyro.orientationFirstAng();
 
-        double newY = y * Math.cos(angle) + x * Math.sin(angle);
-        double newX = y * Math.sin(angle) - x * Math.cos(angle);
-
-        calculateDrivePowers(newY, newX, rot);
+//        double newY = y * Math.cos(angle) + x * Math.sin(angle);
+//        double newX = y * Math.sin(angle) - x * Math.cos(angle);
+//
+//        calculateDrivePowers(newY, newX, rot);
     }
 
     public void calculateDrivePowers(double y, double x, double rot){

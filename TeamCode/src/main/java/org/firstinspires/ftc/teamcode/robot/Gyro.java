@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -8,17 +10,24 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class Gyro {
 
-    private IMU gyro;
-    private IMU.Parameters hubOrientationParams;
-    private Orientation orientation;
-    private IMU.Parameters quarternion;
+    IMU gyro;
+    IMU.Parameters hubOrientationParams;
+    Orientation orientation;
+    IMU.Parameters quarternion;
+    YawPitchRollAngles robotOrientation;
+
+    double Yaw;
+    double Pitch;
+    double Roll;
 
 
 
-    public Gyro () {
+    public Gyro (HardwareMap hardwareMap) {
+        gyro = hardwareMap.get(IMU.class, "imu");
         hubOrientationParams = new IMU.Parameters(
             new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
@@ -26,35 +35,39 @@ public class Gyro {
             )
         );
 
-        orientation = new Orientation(
-                AxesReference.INTRINSIC,
-                AxesOrder.ZYX,
-                AngleUnit.DEGREES,
-                90,
-                0,
-                -45,
-                0  // acquisitionTime, not used
-        );
+        robotOrientation = gyro.getRobotYawPitchRollAngles();
 
-        quarternion = new IMU.Parameters(
-            new RevHubOrientationOnRobot(
-                new Quaternion(
-                        1.0f, // w
-                        0.0f, // x
-                        0.0f, // y
-                        0.0f, // z
-                        0     // acquisitionTime
-                )
-            )
-        );
+        Yaw = robotOrientation.getYaw(AngleUnit.DEGREES);
+        Pitch = robotOrientation.getPitch(AngleUnit.DEGREES);
+        Roll = robotOrientation.getRoll(AngleUnit.DEGREES);
     }
 
     public void init(){
         gyro.initialize(hubOrientationParams);
     }
+//
+//    public double orientationFirstAng(){
+//        return orientation.firstAngle;
+//    }
+//
+//    public double orientationSecAng(){
+//        return orientation.secondAngle;
+//    }
+//
+//    public double orientationThirdAng(){
+//        return orientation.thirdAngle;
+//    }
 
-    public double getAngleRad(){
-        return orientation.
+    public double getYaw(){
+        return Yaw;
+    }
+
+    public double getPitch(){
+        return Pitch;
+    }
+
+    public double getRoll(){
+        return Roll;
     }
 
 }

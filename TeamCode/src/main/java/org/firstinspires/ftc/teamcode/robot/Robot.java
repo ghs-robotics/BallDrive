@@ -10,7 +10,6 @@ public class Robot {
 
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         drive = new Drivebase(hardwareMap, telemetry, gyro);
-        gyro = new Gyro();
 
     }
 
