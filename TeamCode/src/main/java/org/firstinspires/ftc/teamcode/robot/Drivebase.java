@@ -29,10 +29,7 @@ public class Drivebase {
 
         motors = Arrays.asList(leftMotor, rightMotor, backMotor);
 
-        for (int i = 0; i < motors.size(); i++) {
-
-            motors.get(i).setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        }
+        for (int i = 0; i < motors.size(); i++) motors.get(i).setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         gyro = new Gyro();
 

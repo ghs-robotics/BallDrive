@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.inputs.DriveType;
-import org.firstinspires.ftc.teamcode.robot.Drivebase;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @TeleOp
@@ -13,34 +12,40 @@ public class Tele extends LinearOpMode {
     Robot robot;
     DriveType dT;
 
+    int driveMode;
+
     @Override
     public void runOpMode() throws InterruptedException {
-        robot = new Robot(hardwareMap, telemetry);
-        dT = new DriveType();
-
-        int counter = 0;
-
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
+        Init();
         waitForStart();
+
         while (opModeIsActive()){
-            double triggers = gamepad1.right_trigger -gamepad1.left_trigger;
-            int driveMode = counter % 3;
+            //rotation magnitude / speed and direction
+            double rotMag = gamepad1.right_trigger - gamepad1.left_trigger;
 
-            if (gamepad1.left_bumper && gamepad1.right_bumper)
-                counter++;
+            //Change drive mode
+            if (gamepad1.left_bumper && gamepad1.right_bumper) driveMode = (driveMode + 1) % 3;
 
-            if (driveMode == 0)
+            if (driveMode == 0) //Standard Drive
                 robot.drive.calculateDrivePowers(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-            else if (driveMode == 1)
+            else if (driveMode == 1) //Meta Drive
                 robot.drive.metaDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-            else
-                robot.drive.setDrivePowers(gamepad1.left_stick_y, gamepad1.right_stick_y, triggers);
+            else // Tank Drive
+                robot.drive.setDrivePowers(gamepad1.left_stick_y, gamepad1.right_stick_y, rotMag);
 
 
             telemetry.addData("mode", dT.driveMode(driveMode));
             telemetry.update();
         }
+    }
+
+    private void Init() {
+        robot = new Robot(hardwareMap, telemetry);
+        dT = new DriveType();
+
+        driveMode = 0;
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
     }
 }
