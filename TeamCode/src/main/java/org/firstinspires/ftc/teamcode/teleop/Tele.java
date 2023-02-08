@@ -56,7 +56,7 @@ public class Tele extends LinearOpMode {
         }
     }
     private void Telemetry() {
-        telemetry.addData("mode", dT.driveMode(driveMode));
+        telemetry.addData("mode", dT.getDriveModeName(driveMode));
         telemetry.update();
     }
 }

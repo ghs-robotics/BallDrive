@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.inputs;
 
 public class DriveType {
-    public String driveMode(int mode){
-        String normal = "normal drive (like mecanum";
-        String meta = "meta drive";
-        String tank = "janky tank drive controls";
+    public String getDriveModeName(int mode){
+        String standard = "Standard Drive";
+        String meta = "Meta Drive";
+        String tank = "Tank Drive";
 
         if (mode == 0)
-            return normal;
+            return standard;
         else if (mode == 1)
             return meta;
         else
@@ -18,17 +18,17 @@ public class DriveType {
         int mode = counter % 3;
 
         if (mode == 0)
-            return Types.NORMAL;
+            return Types.STANDARD;
         else if (mode == 1)
             return Types.META;
         else
-            return Types.JANKTANK;
+            return Types.TANK;
     }
 
     public enum Types{
-        JANKTANK,
-        NORMAL,
-        META
+        STANDARD,
+        META,
+        TANK
     }
 }
 
