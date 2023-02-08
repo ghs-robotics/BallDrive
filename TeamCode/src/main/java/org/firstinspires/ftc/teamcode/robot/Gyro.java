@@ -54,7 +54,7 @@ public class Gyro {
     }
 
     public double getAngleRad(){
-        return orientation.
+        return 0; //orientation.;
     }
 
 }
