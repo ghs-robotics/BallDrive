@@ -34,16 +34,16 @@ public class Gyro {
                 RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
             )
         );
+    }
+
+    public void init(){
+        gyro.initialize(hubOrientationParams);
 
         robotOrientation = gyro.getRobotYawPitchRollAngles();
 
         Yaw = robotOrientation.getYaw(AngleUnit.DEGREES);
         Pitch = robotOrientation.getPitch(AngleUnit.DEGREES);
         Roll = robotOrientation.getRoll(AngleUnit.DEGREES);
-    }
-
-    public void init(){
-        gyro.initialize(hubOrientationParams);
     }
 //
 //    public double orientationFirstAng(){
