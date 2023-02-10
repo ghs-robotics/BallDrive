@@ -10,8 +10,4 @@ public class Robot {
     public Robot(HardwareMap hardwareMap, Telemetry telemetry){
         drive = new Drivebase(hardwareMap, telemetry);
     }
-
-    public void update(){
-
-    }
 }
