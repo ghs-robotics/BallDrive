@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +19,7 @@ public class Drivebase {
 
     public List<DcMotor> motors;
 
-    public Drivebase(HardwareMap hardwareMap, Telemetry telemetry, Gyro gyro){
+    public Drivebase(HardwareMap hardwareMap, Telemetry telemetry){
         leftMotor = hardwareMap.get(DcMotor.class, "left");
         rightMotor = hardwareMap.get(DcMotor.class, "right");
         backMotor = hardwareMap.get(DcMotor.class, "back");
@@ -40,12 +41,12 @@ public class Drivebase {
     }
 
     public void metaDrive (double y, double x, double rot){
-        //double angle = gyro.orientationFirstAng();
+        double angle = -gyro.getFirst(AngleUnit.RADIANS);
 
-//        double newY = y * Math.cos(angle) + x * Math.sin(angle);
-//        double newX = y * Math.sin(angle) - x * Math.cos(angle);
-//
-//        calculateDrivePowers(newY, newX, rot);
+        double newY = y * Math.cos(angle) - x * Math.sin(angle);
+        double newX = y * Math.sin(angle) + x * Math.cos(angle);
+
+        calculateDrivePowers(newY, newX, rot);
     }
 
     public void calculateDrivePowers(double y, double x, double rot){
