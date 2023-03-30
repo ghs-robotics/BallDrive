@@ -3,21 +3,16 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.inputs.DriveType;
-import org.firstinspires.ftc.teamcode.robot.Drivebase;
-import org.firstinspires.ftc.teamcode.robot.Gyro;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @TeleOp
 public class Tele extends LinearOpMode {
 
     Robot robot;
-    DriveType dT;
 
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
-        dT = new DriveType();
 
         int counter = 0;
 
@@ -40,7 +35,6 @@ public class Tele extends LinearOpMode {
                 robot.drive.setDrivePowers(gamepad1.left_stick_y, gamepad1.right_stick_y, triggers);
 
 
-            telemetry.addData("mode", dT.driveMode(driveMode));
             telemetry.addLine();
 //
             telemetry.update();

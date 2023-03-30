@@ -32,7 +32,7 @@ public class Gyro {
     }
 
 
-    public double getFirst(AngleUnit unit){
+    public double getHeading(AngleUnit unit){
         double yaw = getOrientation(unit)[0];
         return yaw;
     }

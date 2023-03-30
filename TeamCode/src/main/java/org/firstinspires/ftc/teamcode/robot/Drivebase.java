@@ -19,7 +19,7 @@ public class Drivebase {
 
     public List<DcMotor> motors;
 
-    public Drivebase(HardwareMap hardwareMap, Telemetry telemetry){
+    public Drivebase(HardwareMap hardwareMap, Telemetry telemetry, Gyro gyro){
         leftMotor = hardwareMap.get(DcMotor.class, "left");
         rightMotor = hardwareMap.get(DcMotor.class, "right");
         backMotor = hardwareMap.get(DcMotor.class, "back");
@@ -35,13 +35,11 @@ public class Drivebase {
             motors.get(i).setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         }
 
-        gyro = new Gyro(hardwareMap);
-
         telemetry.update();
     }
 
     public void metaDrive (double y, double x, double rot){
-        double angle = -gyro.getFirst(AngleUnit.RADIANS);
+        double angle = -gyro.getHeading(AngleUnit.RADIANS);
 
         double newY = y * Math.cos(angle) - x * Math.sin(angle);
         double newX = y * Math.sin(angle) + x * Math.cos(angle);
