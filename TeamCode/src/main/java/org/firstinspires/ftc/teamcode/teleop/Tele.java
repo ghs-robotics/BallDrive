@@ -3,39 +3,33 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.robot.Drivebase;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @TeleOp
 public class Tele extends LinearOpMode {
-
     Robot robot;
+    Controls controls;
 
     @Override
     public void runOpMode() throws InterruptedException {
         robot = new Robot(hardwareMap, telemetry);
-
-        int counter = 0;
+        controls = new Controls(robot);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
+        robot.gyro.reset();
         waitForStart();
+
         while (opModeIsActive()){
-            double triggers = gamepad1.right_trigger -gamepad1.left_trigger;
-            int driveMode = counter % 3;
 
-            if (gamepad1.left_bumper && gamepad1.right_bumper)
-                counter++;
+            controls.metaDrive(gamepad1);
+            controls.resetGyro(gamepad1);
 
-            if (driveMode == 0)
-                robot.drive.calculateDrivePowers(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-            else if (driveMode == 1)
-                robot.drive.metaDrive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-            else
-                robot.drive.setDrivePowers(gamepad1.left_stick_y, gamepad1.right_stick_y, triggers);
-
-
+            telemetry.addData("1", robot.gyro.getHeading(AngleUnit.DEGREES));
+            telemetry.addData("2", robot.gyro.getSecond(AngleUnit.DEGREES));
+            telemetry.addData("3", robot.gyro.getThird(AngleUnit.DEGREES));
             telemetry.update();
         }
     }
