@@ -83,9 +83,6 @@ public class ColorDetectionPipeline extends OpenCvPipeline {
             hueDiff.add(Math.abs(hueTargets.get(i) - hueChannel.get(0, 0)[0]));
         }
 
-//        Core.absdiff(hueTargets, hueChannel, hueDiff);
-//
-//        //Find location of min hue difference
         int result = -1;
         int minIndex = 2;
         double min = hueDiff.get(2);
@@ -95,16 +92,6 @@ public class ColorDetectionPipeline extends OpenCvPipeline {
                 min = hueDiff.get(i);
             }
         }
-
-//        telemetry.addLine("Sighted Hue: " + hueChannel.get(0, 0)[0]);
-//        telemetry.addLine("Hue Difference: " + hueDiff.get(minIndex));
-//        telemetry.addLine("Result is: " + result);
-//        telemetry.addLine("MinIndex is: " + minIndex);
-//        telemetry.addLine("" + hueDiff.get(0));
-//        telemetry.addLine("" + hueDiff.get(1));
-//        telemetry.addLine("" + hueDiff.get(2));
-//
-//        telemetry.update();
 
         //Add color detection hue diff is small enough and not already detected
         if(hueDiff.get(minIndex) < hueThreshold ) {
