@@ -5,13 +5,12 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class Drivebase {
-    private Robot robot;
-
     public Gyro gyro;
 
     public DcMotor leftMotor;
@@ -20,7 +19,7 @@ public class Drivebase {
 
     public List<DcMotor> motors;
 
-    public Drivebase(HardwareMap hardwareMap, Telemetry telemetry){
+    public Drivebase(HardwareMap hardwareMap, Telemetry telemetry, Gyro gyro){
         leftMotor = hardwareMap.get(DcMotor.class, "left");
         rightMotor = hardwareMap.get(DcMotor.class, "right");
         backMotor = hardwareMap.get(DcMotor.class, "back");
@@ -31,9 +30,10 @@ public class Drivebase {
 
         motors = Arrays.asList(leftMotor, rightMotor, backMotor);
 
-        for (int i = 0; i < motors.size(); i++) motors.get(i).setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        for (int i = 0; i < motors.size(); i++) {
 
-        gyro = new Gyro();
+            motors.get(i).setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        }
 
         telemetry.update();
     }

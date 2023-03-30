@@ -1,60 +1,64 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class Gyro {
 
-    private IMU gyro;
-    private IMU.Parameters hubOrientationParams;
-    private Orientation orientation;
-    private IMU.Parameters quarternion;
+    IMU gyro;
+    Orientation orientation;
+    RevHubOrientationOnRobot revOrientation;
+    YawPitchRollAngles angles;
+
+    double heading;
+
+    public Gyro (HardwareMap hardwareMap) {
+        gyro = hardwareMap.get(IMU.class, "imu");
+        orientation = new Orientation(AxesReference.INTRINSIC, AxesOrder.ZYX, DEGREES, 0, 0, 0, 0) ;
+        revOrientation = new RevHubOrientationOnRobot(orientation);
+        IMU.Parameters parameters = new IMU.Parameters(revOrientation);
+
+        gyro.initialize(parameters);
 
 
 
-    public Gyro () {
-        hubOrientationParams = new IMU.Parameters(
-            new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
-            )
-        );
-
-        orientation = new Orientation(
-                AxesReference.INTRINSIC,
-                AxesOrder.ZYX,
-                AngleUnit.DEGREES,
-                90,
-                0,
-                -45,
-                0  // acquisitionTime, not used
-        );
-
-        quarternion = new IMU.Parameters(
-            new RevHubOrientationOnRobot(
-                new Quaternion(
-                        1.0f, // w
-                        0.0f, // x
-                        0.0f, // y
-                        0.0f, // z
-                        0     // acquisitionTime
-                )
-            )
-        );
+    public double getHeading(AngleUnit unit){
+        double yaw = getOrientation(unit)[0];
+        return yaw;
     }
 
-    public void init(){
-        gyro.initialize(hubOrientationParams);
+    public double getSecond(AngleUnit unit){
+        double pitch = getOrientation(unit)[1];
+        return pitch;
     }
 
-    public double getAngleRad(){
-        return 0; //orientation.;
+    public double getThird(AngleUnit unit){
+        double roll = getOrientation(unit)[0];
+        return roll;
+    }
+
+    public void reset(){
+        gyro.resetYaw();
+    }
+
+    public double[] getOrientation(AngleUnit unit){
+        angles = gyro.getRobotYawPitchRollAngles();
+        double yaw   = angles.getYaw(unit);
+        double pitch = angles.getPitch(unit);
+        double roll  = angles.getRoll(unit);
+
+        double[] angle = {yaw, pitch, roll};
+
+        return angle;
     }
 
 }
